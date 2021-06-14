@@ -23,3 +23,5 @@ That being said, most snippets have already been tested for correctness, and I t
 Requires [notebook-generator](https://github.com/pin3da/notebook-generator).
 
 Just run generate.sh. Don't forget to chmod +x it.
+
+You can also change the author for e.g. ICPC team notebooks (or you simply just want your own name in there)
