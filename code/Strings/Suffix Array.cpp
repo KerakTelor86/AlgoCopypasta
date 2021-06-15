@@ -2,7 +2,7 @@
 // if lcp is needed, call SuffixArray(str, 1)
 struct SuffixArray
 {
-    const int n;
+    int n;
     vector<int> sa, lcp, rnk, cnt;
     vector<pair<int, int>> p;
     SuffixArray(const string& s, bool calc_lcp = 0) :
