@@ -29,10 +29,7 @@ struct SuffixArray
                 l = max(l - 1, 0);
             }
         }
-        for(int i = 0; i < n; ++i)
-        {
-            lcp[i] = plcp[sa[i]];
-        }
+        for(int i = 0; i < n; ++i) lcp[i] = plcp[sa[i]];
     }
     void update_sa(int len)
     {
