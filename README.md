@@ -1,6 +1,11 @@
 # AlgoCopypasta
 Copy-pasteable code for programming competitions and ICPC notebook templates.
 
+# Contributions
+Contributions are welcome. Open a PR and I'll see if I can't merge it into the main branch.
+
+Before you open a PR, make sure you've tested your pasta for correctness e.g. by using it to get ~2-3 ACs in contests or upsolving.
+
 # Disclaimer
 The snippets provided in this repo are not meant to be understood but rather plainly copy-pasted into whatever you're working on whenever they are needed. They are also not meant to be used in actual programming without significant changes.
 
