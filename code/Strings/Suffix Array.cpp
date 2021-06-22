@@ -6,11 +6,10 @@ struct SuffixArray
     vector<int> sa, lcp, rnk, cnt;
     vector<pair<int, int>> p;
     SuffixArray(const string& s, bool calc_lcp = 0) :
-        n(s.length() + 1), sa(n), lcp(calc_lcp ? n : 0), rnk(n << 1),
+        n(s.length()), sa(n), lcp(calc_lcp ? n : 0), rnk(n),
         cnt(max(n, 256)), p(n)
     {
-        for(int i = 0; i < n - 1; ++i) rnk[i] = s[i];
-        rnk[n - 1] = 0;
+        for(int i = 0; i < n; ++i) rnk[i] = s[i];
         iota(sa.begin(), sa.end(), 0);
         for(int i = 1; i < n; i <<= 1) update_sa(i);
         if(!calc_lcp) return;
@@ -34,7 +33,7 @@ struct SuffixArray
     void update_sa(int len)
     {
         sort_sa(len); sort_sa(0);
-        for(int i = 0; i < n; ++i) p[i] = {rnk[i], rnk[i + len]};
+        for(int i = 0; i < n; ++i) p[i] = {rnk[i], rnk[(i + len) % n]};
         auto lst = p[sa[0]];
         rnk[sa[0]] = 0;
         int cur = 0;
@@ -51,7 +50,7 @@ struct SuffixArray
     void sort_sa(int offset)
     {
         fill(cnt.begin(), cnt.end(), 0);
-        for(int i = 0; i < n; ++i) ++cnt[rnk[i + offset]];
+        for(int i = 0; i < n; ++i) ++cnt[rnk[(i + offset) % n]];
         int sum = 0;
         for(int i = 0; i < (int) cnt.size(); ++i)
         {
@@ -62,7 +61,7 @@ struct SuffixArray
         vector<int> temp(n);
         for(int i = 0; i < n; ++i)
         {
-            int cur = cnt[rnk[sa[i] + offset]]++;
+            int cur = cnt[rnk[(sa[i] + offset) % n]]++;
             temp[cur] = sa[i];
         }
         sa = move(temp);
