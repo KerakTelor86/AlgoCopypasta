@@ -7,11 +7,11 @@ Contributions are welcome. Open a PR and I'll see if I can't merge it into the m
 Before you open a PR, make sure you've tested your pasta for correctness e.g. by using it to get ~2-3 ACs in contests or upsolving.
 
 # Disclaimer
-The snippets provided in this repo are not meant to be understood but rather plainly copy-pasted into whatever you're working on whenever they are needed. They are also not meant to be used in actual programming without significant changes.
+The snippets provided in this repo are not meant to be understood but rather plainly copy-pasted into whatever you're working on whenever they are needed. They are also not meant to be used in actual real-world programs without significant changes.
 
 Because of this, the code style used here may be very scuffed while the code quality itself is questionable at best. Issues include:
 - Minimalist variable naming
-- Minimalist brackets
+- Minimalist use of brackets
 - Comma operator abuse
 - Lack of whitespace
 - Lack of access specifiers
