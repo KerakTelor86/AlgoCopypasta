@@ -1,2 +1,2 @@
 #!/bin/sh
-notebook-generator ./code/ -a "Richard Alison" -i "KerakTelor" -p a4paper
+notebook-generator ./code/ -a "" -i "" -p a4paper -s 9

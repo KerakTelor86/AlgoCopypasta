@@ -1,0 +1,38 @@
+Maximal number of regions obtained by joining n points around a circle by straight lines
+1, 2, 4, 8, 16, 31, 57, 99, 163, 256, 386, 562, 794, 1093, 1471, 1941, 2517, 3214,
+4048, 5036, 6196, 7547, 9109, 10903, 12951, 15276, 17902, 20854, 24158, 27841, 31931,
+36457, 41449, 46938, 52956, 59536, 66712, 74519, 82993, 92171, 102091, 112792,
+124314, 136698
+a(n) = (n^4 - 6*n^3 + 23*n^2 - 18*n + 24)/24.
+
+Number of distinct spanning tree in a wheel graph n+1 vertices
+a(n+1) = 3*a(n) - a(n-1) + 2
+
+Number of dissections of a convex (n+2)-gon into triangles and quadrilaterals by nonintersecting diagonals.
+1, 1, 3, 10, 38, 154, 654, 2871, 12925, 59345, 276835, 1308320, 6250832, 30142360,
+146510216, 717061938, 3530808798
+5*n*(n+1) * a(n) = 11*n*(2*n-1) * a(n-1) + 3*(3*n-2)*(3*n-4) * a(n-2)
+
+Number of graphs with n nodes and n edges.
+0, 0, 1, 2, 6, 21, 65, 221, 771, 2769, 10250, 39243, 154658, 628635, 2632420,
+11353457, 50411413, 230341716, 1082481189, 5228952960, 25945377057, 132140242356,
+690238318754, 3694876952577
+
+Number of nonintersecting rook paths joining opposite corners of 4 X n board.
+1, 8, 38, 184, 976, 5382, 29739, 163496, 896476, 4913258, 26932712, 147657866,
+809563548, 4438573234, 24335048679, 133419610132, 731487691902
+a(n) = 12*a(n - 1) - 54*a(n - 2) + 124*a(n - 3) - 133*a(n - 4) - 16*a(n - 5) +
+175*a(n - 6) - 94*a(n - 7) - 69*a(n - 8) + 40*a(n - 9) + 12*a(n - 10) - 4*a(n - 11) -
+a(n - 12).
+
+
+Hertzsprung’s problem: ways to arrange n non-attacking kings on an n X
+n board, with 1 in each row and column. Also number of permutations of
+length n without rising or falling successions.
+1, 1, 0, 0, 2, 14, 90, 646, 5242, 47622, 479306, 5296790, 63779034, 831283558,
+11661506218, 175203184374, 2806878055610
+If n = 0 or 1 then a(n) = 1; if n = 2 or 3 then a(n) = 0; otherwise a(n) = (n+1)*a(n-
+1) - (n-2)*a(n-2) - (n-5)*a(n-3) + (n-3)*a(n-4)
+
+1 + ½ + ⅓ + ¼ + ⅕ + …+ 1/N = ln(N) + C
+1/1 + ¼ + 1/9 + 1/16 + 1/25 + … + 1/N^2 = (pi^2)/6 = constant
