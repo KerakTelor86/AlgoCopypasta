@@ -59,10 +59,8 @@ struct MCMF
 
     pair<ll, ll> solve(int _st, int _ed)
     {
-        st = _st;
-        ed = _ed;
-        flow = 0;
-        cost = 0;
+        st = _st, ed = _ed;
+        flow = 0, cost = 0;
         H.assign(n + 1, 0);
         while(dijkstra())
         {
