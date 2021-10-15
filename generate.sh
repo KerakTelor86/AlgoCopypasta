@@ -1,2 +1,2 @@
 #!/bin/sh
-notebook-generator ./code/ -a "" -i "" -p a4paper -s 9
+notebook-generator ./code/ -a "BINUS - Among" -i "BINUS - Among" -p a4paper -s 8
