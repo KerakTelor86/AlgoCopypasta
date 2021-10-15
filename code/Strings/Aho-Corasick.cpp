@@ -1,66 +1,55 @@
-struct node{
-    node* next[256],* fail,* suflink;
-    int id;
-    node() : fail(NULL), suflink(NULL), id(-1){
-        for (int i = 0; i < 256; i++) next[i] = NULL; }
-} head;
-
-vector<string>pats; // stores unique strings
-vector<int>patIdx; // stores index of string in pats
-vector<vector<int> >match; // stores all matched pats in str
-
-void addPat(string pat){ // returns string id
-    node* now = &head;
-    for (int i = 0; i < pat.size(); i++) {
-        if(!now->next[pat[i]])now->next[pat[i]] = new node();
-        now = now->next[pat[i]];
+const int K = 26;
+struct Vertex {
+    int next[K];
+    bool leaf = 0;
+    int p = -1, ans = 0;
+    char pch;
+    int link = -1, mlink = -1;
+    //magic link, is the link to find the nearest leaf
+    int go[K];
+    Vertex(int p=-1, char ch='$') : p(p), pch(ch) {
+        fill(begin(next), end(next), -1);
+        fill(begin(go), end(go), -1);
     }
-    if(now->id == -1){ // prevents doubles
-        now->id = pats.size();
-        pats.pb(pat);
-        match.pb(vector<int>());
+};
+vector<Vertex> t;
+int add_string(string const& s) {
+    int v = 0;
+    for (char ch : s) {
+        int c = ch - 'a';
+        if (t[v].next[c] == -1) {
+            t[v].next[c] = t.size();
+            t.emplace_back(v, ch);
+        } v = t[v].next[c];
     }
-    patIdx.pb(now->id);
+    t[v].leaf = 1;
+    return v;
 }
-queue<node*>q;
-void buildAutomaton(){
-    q.push(&head);
-    while(!q.empty()){
-        node* now = q.front();
-        q.pop();
-        for (int i = 0; i < 256; i++) {
-            if(!now->next[i])continue;
-            node* nt = now->next[i];
-            nt->fail = now->fail;
-            while(nt->fail && !nt->fail->next[i])nt->fail = nt->fail->fail;
-            if(nt->fail)nt->fail = nt->fail->next[i];
-            else nt->fail = &head;
-            if(nt->fail->id != -1)nt->suflink = nt->fail;
-            else nt->suflink = nt->fail->suflink;
-            q.push(nt);
-        }}}
-void searchStr(string str){
-    node* now = &head;
-    for (int i = 0; i < str.size(); i++) {
-        while(now != &head && !now->next[str[i]])now = now->fail;
-        if(now->next[str[i]]){
-            now = now->next[str[i]];
-            for(node* curr = now; curr; curr = curr->suflink){ // iterate links
-                if(curr->id == -1)continue;
-                match[curr->id].pb(i - pats[curr->id].size() + 1);
-            }}}}
-int main() {
-    // clear for multiple testcase
-    pats.clear(); patIdx.clear();
-    head = node();
-    while (!q.empty()) q.pop();
-
-    foreach pattern: addPat(p);
-    buildAutomaton();
-
-    // clear match before every searchStr
-    for (int i = 0; i < match.size(); i++) match[i].clear();
-    searchStr(s);
-    match[patIdx[i]] stores all patterns found in s,
-        i.e. all index of s where pattern_i is found
+int go(int v, char ch);
+int get_link(int v) {
+    if (t[v].link == -1) {
+        if (v == 0 || t[v].p == 0) t[v].link = 0;
+        else t[v].link = go(get_link(t[v].p), t[v].pch);
+    }
+    return t[v].link;
 }
+int get_mlink(int v) {
+    if (t[v].mlink == -1) {
+        if (v == 0 || t[v].p == 0) t[v].mlink = 0;
+        else{
+            t[v].mlink = go(get_link(t[v].p), t[v].pch);
+            if(t[v].mlink && !t[t[v].mlink].leaf){
+                if(t[t[v].mlink].mlink==-1)get_mlink(t[v].mlink);
+                t[v].mlink = t[t[v].mlink].mlink;
+            }
+        }
+    } return t[v].mlink;
+}
+int go(int v, char ch) {
+    int c = ch - 'a';
+    if (t[v].go[c] == -1) {
+        if (t[v].next[c] != -1) t[v].go[c] = t[v].next[c];
+        else t[v].go[c] = v == 0 ? 0 : go(get_link(v), ch);
+    } return t[v].go[c];
+}
+//t.pb(Vertex());
