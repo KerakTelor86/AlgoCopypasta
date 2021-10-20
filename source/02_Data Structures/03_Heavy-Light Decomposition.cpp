@@ -1,13 +1,13 @@
 struct HLD {
   int n;
-  vector<int> id, size, idx, lv, up, root, st;
+  vector<int> id, size, idx, up, root, st;
   vector<vector<int>> adj, chain;
   SegTree seg;
 
   HLD(const vector<vector<int>>& edges) :
     n(edges.size()), id(n, -1), size(n, -1), idx(n, -1),
-    lv(n, -1), up(n, -1), adj(edges), seg(n) {
-    precompute(0, -1, 0);
+    up(n, -1), adj(edges), seg(n) {
+    precompute(0, -1);
     decompose(0, -1);
     int cnt = 0;
     st.resize(chain.size());
@@ -17,13 +17,12 @@ struct HLD {
     }
   }
 
-  void precompute(int pos, int dad, int dep) {
-    lv[pos] = dep;
+  void precompute(int pos, int dad) {
     size[pos] = 1;
     up[pos] = dad;
     for(auto& i : adj[pos]) {
       if(i != dad) {
-        precompute(i, pos, dep + 1);
+        precompute(i, pos);
         size[pos] += size[i];
       }
     }
