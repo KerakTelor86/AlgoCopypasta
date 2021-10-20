@@ -1,0 +1,22 @@
+\begin{lstlisting}
+let S0 be the source and T0 be the original sink
+1. add 2 additional nodes, call them S1 and T1
+2. connect S0 to nodes normally
+3. connect nodes to T0 normally
+4. for each edge(U, V), cap = original cap - demand
+5. for each node N :
+   1. add an edge(S1, N), cap = sum of inward demand to N
+   2. add an edge(N, T1), cap = sum of outward demand from N
+6. add an edge(T0, S0), cap = INF
+7. the above is not a typo!
+8. run max flow normally
+9. for each edge(S1, V) and (U, T1), check if flow == cap
+if step #9 fails, then it is not possible to satisfy the given demand
+\end{lstlisting}
+\par\noindent Mathematically, let $d(e)$ be the demand of edge $e$. Let $V$ be the set of every vertex in the graph.
+\begin{itemize}
+    \item $c'(S_1,v) = \sum_{u\in{V}} d(u,v)$ for each edge $(s',v)$.
+    \item $c'(v,T_1) = \sum_{v\in{V}} d(v,w)$ for each edge $(v,t')$.
+    \item $c'(u,v) = c(u,v) - d(u,v)$ for each edge $(u,v)$ in the old network.
+    \item $c'(T_0,S_0) = \infty$
+\end{itemize}

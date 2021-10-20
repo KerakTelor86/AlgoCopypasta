@@ -1,0 +1,115 @@
+% Compiled and edited by Brian Bi, modified by AVM
+
+\documentclass[8pt,a4paper]{extarticle}
+
+% Set font
+\usepackage{fontspec}
+\setmonofont{Source Code Pro}
+
+\usepackage{amsmath}
+\usepackage{multicol}
+\usepackage{pdflscape}
+
+% Images Depedencies
+\usepackage{eso-pic}
+\usepackage{graphicx}
+
+\usepackage{verbatim} % for block comments
+
+% ====================================================================================================
+% General
+\usepackage[portrait,twoside=false,top=18mm,bottom=15mm,left=5mm,right=5mm,footskip=5mm]{geometry}
+\setlength{\parindent}{0mm}
+\setlength{\parskip}{0mm}
+\setlength{\baselineskip}{0mm}
+\usepackage{color}
+
+% ====================================================================================================
+% Header and Footer
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\setlength{\headheight}{24bp}
+\setlength{\headsep}{2mm}
+\renewcommand{\footrulewidth}{0.4pt}
+\pagestyle{fancy}
+\fancyhf{}
+
+\input{headfoot.tex}
+\fancypagestyle{plain}{
+  \input{headfoot.tex}
+}
+
+% ====================================================================================================
+% Hyperlink TOC
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=false, %set true if you want colored links
+  linktoc=all,     %set to all if you want both sections and subsections linked
+  % linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+% ====================================================================================================
+% listing settings
+\usepackage{listings}
+
+\lstdefinestyle{fullcolor}{
+  keywordstyle=\color[rgb]{0,0,1},
+  commentstyle=\color[rgb]{0.133,0.545,0.133},
+  stringstyle=\color[rgb]{0.627,0.126,0.941},
+}
+
+\lstdefinestyle{bw_printing}{
+  keywordstyle=\color[rgb]{0,0,0},
+  commentstyle=\color[rgb]{0,0,0},
+  stringstyle=\color[rgb]{0,0,0},
+}
+
+\lstset{
+  tabsize=4,
+  basicstyle=\ttfamily\small,
+  %upquote=true,
+  aboveskip=0mm,
+  belowskip=0mm,
+  columns=fixed,
+  %columns=fullflexible, keepspaces=true,
+  showstringspaces=false,
+  breaklines=true,
+  prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+  frame=single,
+  rulecolor=\color[rgb]{0.75,0.75,0.75},
+  style=fullcolor,
+  % style=bw_printing,
+}
+
+% ====================================================================================================
+% Documents
+\begin{document}
+\begin{landscape}
+
+% Contents
+\begin{multicols}{3}
+\tableofcontents
+\end{multicols}
+
+\vskip2mm
+\hrule
+
+\begin{multicols*}{2}
+\input{contents.tex}
+% \vfill \null
+% \input{cova/images.tex}
+\end{multicols*}
+
+\end{landscape}
+
+% ====================================================================================================
+% Geometric Paper
+% \newpage{}
+% \section{Geometric Paper}
+% \AddToShipoutPicture*{
+%   \put(0,0){
+%     \includegraphics{source/1-introduction/geometricPaper.jpg}
+%   }
+% }
+
+\end{document}
