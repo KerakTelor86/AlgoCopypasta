@@ -18,7 +18,7 @@ struct Dinic {
   vector<int> idx, lv;
 
   bool has_path(int s, int t) {
-    queue < int > q;
+    queue<int> q;
     q.push(s);
     lv.assign(n, -1);
     lv[s] = 0;

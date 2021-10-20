@@ -76,12 +76,15 @@ void clip(vector <point>& poly_points, point point1, point point2) {
       new_points.push_back(poly_points[k]);
     //out in
     else if(i_pos > 0  && k_pos <= 0) {
-      new_points.push_back(intersect(point1, point2, poly_points[i], poly_points[k]));
+      new_points.push_back(intersect(point1, point2, poly_points[i],
+                                     poly_points[k]));
       new_points.push_back(poly_points[k]);
     }
     // in out
-    else if(i_pos <= 0  && k_pos > 0)
-      new_points.push_back(intersect(point1, point2, poly_points[i], poly_points[k]));
+    else if(i_pos <= 0  && k_pos > 0) {
+      new_points.push_back(intersect(point1, point2, poly_points[i],
+                                     poly_points[k]));
+    }
     //out out
     else {
     }

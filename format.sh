@@ -6,7 +6,7 @@ for dir in *; do
         --delete-empty-lines --align-pointer=type --align-reference=type \
         --remove-braces --convert-tabs --max-code-length=80 \
         --lineend=linux --unpad-paren --suffix=none --formatted "$file" \
-        &> /dev/null
+        --options=none &> /dev/null
     done
 done
 cd ..
