@@ -4,43 +4,42 @@
 
 runner:
 #!/bin/bash
-cppPath=$1; useFile=$3; tmpPath='.cache'; binPath="$tmpPath/$2"
-hashCache="$tmpPath/${2}-hash"
-line="====================================================================="
-timeFormat="${line}\nTime: %es"
-readyCache() {
-    mkdir -p "$tmpPath"
+cp=$1; uf=$3; tmp='.cache'; bp="$tmp/$2"; ch="$tmp/${2}-hash"
+li="====================================================================="
+ti="${li}\nTime: %es"
+rc() {
+    mkdir -p "$tmp"
 }
-setCachedHash() {
-    readyCache; echo -n "$(getHash)" > "$hashCache"
+sch() {
+    rc; echo -n "$(gh)" > "$ch"
 }
-getCachedHash() {
-    readyCache
-    if [[ -f "$hashCache" ]]; then cat $hashCache
+gch() {
+    rc
+    if [[ -f "$ch" ]]; then cat $ch
     else echo -n 'NULL'; fi
 }
-getHash() {
-    sha256sum $cppPath
+gh() {
+    sha256sum $cp
 }
-needsRecompile() {
-    oldHash=$(getCachedHash); newHash=$(getHash)
-    if [[ "$oldHash" == "$newHash" ]]; then return 1
+nr() {
+    oh=$(gch); nh=$(gh)
+    if [[ "$oh" == "$nh" ]]; then return 1
     else return 0; fi
 }
-compile() {
-    g++ $cppPath -O2 -std=gnu++17 -Wall -Wextra -Wshadow -DLOCAL -o $binPath
+cc() {
+    g++ $cp -O2 -std=gnu++17 -Wall -Wextra -Wshadow -DLOCAL -o $bp
 }
-main() {
-    echo $line
-    if needsRecompile; then
-        if [[ -f "$binPath" ]]; then rm "$binPath"; fi
-        setCachedHash; echo 'Compiling...'; echo $line; compile; echo $line
+ma() {
+    echo $li
+    if nr; then
+        if [[ -f "$bp" ]]; then rm "$bp"; fi
+        sch; echo 'Compiling...'; echo $li; cc; echo $li
     fi
-    if [[ -f "$binPath" ]]; then
-        echo 'Running...'; echo $line
-        if (( $useFile )); then command time -f "$timeFormat" ./$binPath < IN
-        else command time -f "$timeFormat" ./$binPath; fi
-        echo $line
+    if [[ -f "$bp" ]]; then
+        echo 'Running...'; echo $li
+        if (( $uf )); then command time -f "$ti" ./$bp < IN
+        else command time -f "$ti" ./$bp; fi
+        echo $li
     fi
 }
-main
+ma
