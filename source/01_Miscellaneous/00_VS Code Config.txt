@@ -1,0 +1,58 @@
+#!/bin/bash
+cppPath=$1; useFile=$3; tmpPath='.cache'; binPath="$tmpPath/$2"
+hashCache="$tmpPath/${2}-hash"
+line="====================================================================="
+timeFormat="${line}\nTime: %es"
+readyCache() {
+    mkdir -p "$tmpPath"
+}
+setCachedHash() {
+    readyCache
+    echo -n "$(getHash)" > "$hashCache"
+}
+getCachedHash() {
+    readyCache
+    if [[ -f "$hashCache" ]]; then
+        cat $hashCache
+    else
+        echo -n 'NULL'
+    fi
+}
+getHash() {
+    sha256sum $cppPath
+}
+needsRecompile() {
+    oldHash=$(getCachedHash); newHash=$(getHash)
+    if [[ "$oldHash" == "$newHash" ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+compile() {
+    g++ $cppPath -O2 -std=gnu++17 -Wall -Wextra -Wshadow -DLOCAL -o $binPath
+}
+main() {
+    echo $line
+    if needsRecompile; then
+        if [[ -f "$binPath" ]]; then
+            rm "$binPath"
+        fi
+        setCachedHash; echo 'Compiling...'; echo $line; compile; echo $line
+    fi
+    if [[ -f "$binPath" ]]; then
+        echo 'Running...'; echo $line
+        if (( $useFile )); then
+            command time -f "$timeFormat" ./$binPath < IN
+        else
+            command time -f "$timeFormat" ./$binPath
+        fi
+        echo $line
+    fi
+}
+main
+
+tasks:
+"command": "clear; ./.cp ${file} ${fileBasenameNoExtension} 0"
+"command": "clear; ./.cp ${file} ${fileBasenameNoExtension} 1"
+"command": "clear; rm -r .cache"
