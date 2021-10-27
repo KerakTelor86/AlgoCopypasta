@@ -72,6 +72,6 @@ while(1) {
   if(hld.id[u] < hld.id[v])
     swap(u, v);
   hld.update(hld.id[u], 0, hld.idx[u], w);
-  // or hld.query(hld.id[u], 0, hld.idx[v]);
+  // or hld.query(hld.id[u], 0, hld.idx[u]);
   u = hld.up[hld.root[hld.id[u]]];
 }
