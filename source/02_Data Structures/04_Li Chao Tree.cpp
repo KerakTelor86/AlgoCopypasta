@@ -1,4 +1,5 @@
 // max li-chao tree
+// works for the range [0, MAX - 1]
 // if min li-chao tree:
 // replace every call to max() with min() and every > with <
 // also replace -INF with INF
@@ -10,7 +11,7 @@ struct Func {
   }
 };
 
-const int MAX = 1e9;
+const int MAX = 1e9 + 1;
 const ll INF = 1e18;
 const Func NIL = {0, -INF};
 
