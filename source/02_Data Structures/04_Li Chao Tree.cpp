@@ -26,7 +26,7 @@ struct Node {
 
 Node* root = new Node;
 
-void insert(Func f, Node* cur = root, int l = 0, int r = MAX) {
+void insert(Func f, Node* cur = root, int l = 0, int r = MAX - 1) {
   int m = l + (r - l) / 2;
   bool left = f(l) > cur->f(l);
   bool mid = f(m) > cur->f(m);
@@ -45,7 +45,7 @@ void insert(Func f, Node* cur = root, int l = 0, int r = MAX) {
   }
 }
 
-ll query(ll x, Node* cur = root, int l = 0, int r = MAX) {
+ll query(ll x, Node* cur = root, int l = 0, int r = MAX - 1) {
   if(!cur)
     return -INF;
   if(l == r)
