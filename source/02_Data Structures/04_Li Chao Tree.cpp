@@ -1,39 +1,57 @@
+// max li-chao tree
+// if min li-chao tree:
+// replace every call to max() with min() and every > with <
+// also replace -INF with INF
 
-typedef long long int TD;
-const TD INF = 10000000000000;
-namespace LICHAO {
-struct Node {
-  TD m, c;
-  Node* l, *r;
+struct Func {
+  ll m, c;
+  ll operator()(ll x) {
+    return x * m + c;
+  }
 };
-Node* newNode(Node* x = NULL) {
-  Node* ret = (Node*)malloc(sizeof(Node));
-  if(x)
-    ret->m = x->m, ret->c = x->c;
-  ret->l = ret->r = NULL;
-  return ret;
+
+const int MAX = 1e9;
+const ll INF = 1e18;
+const Func NIL = {0, -INF};
+
+struct Node {
+  Func f;
+  Node* lc;
+  Node* rc;
+
+  Node() : f(NIL), lc(nullptr), rc(nullptr) {}
+  Node(const Node& n) : f(n.f), lc(nullptr), rc(nullptr) {}
+};
+
+Node* root = new Node;
+
+void insert(Func f, Node* cur = root, int l = 0, int r = MAX) {
+  int m = l + (r - l) / 2;
+  bool left = f(l) > cur->f(l);
+  bool mid = f(m) > cur->f(m);
+  if(mid)
+    swap(f, cur->f);
+  if(l != r) {
+    if(left != mid) {
+      if(!cur->lc)
+        cur->lc = new Node(*cur);
+      insert(f, cur->lc, l, m);
+    } else {
+      if(!cur->rc)
+        cur->rc = new Node(*cur);
+      insert(f, cur->rc, m + 1, r);
+    }
+  }
 }
-void update(Node* k, TD l, TD r, TD m, TD c) {
-  TD mid = l + r >> 1;
-  bool le = m * l + c < k->m * l + k->c;
-  bool ri = m * mid + c < k->m * mid + k->c;
-  if(ri)
-    swap(k->m, m), swap(k->c, c);
-  if(r - l <= 1)
-    return;
-  else if(le != ri)
-    update((k->l) ? (k->l) : (k->l = newNode(k)), l, mid, m, c);
+
+ll query(ll x, Node* cur = root, int l = 0, int r = MAX) {
+  if(!cur)
+    return -INF;
+  if(l == r)
+    return cur->f(x);
+  int m = l + (r - l) / 2;
+  if(x < m)
+    return max(cur->f(x), query(x, cur->lc, l, m));
   else
-    update((k->r) ? (k->r) : (k->r = newNode(k)), mid, r, m, c);
-}
-TD query(Node* k, TD l, TD r, TD p) {
-  if(!k)
-    return INF;
-  if(r - l <= 1)
-    return p * k->m + k->c;
-  if(p < (l + r >> 1))
-    return min(p * k->m + k->c, query(k->l, l, l + r >> 1, p));
-  else
-    return min(p * k->m + k->c, query(k->r, l + r >> 1, r, p));
-}
+    return max(cur->f(x), query(x, cur->rc, m + 1, r));
 }
