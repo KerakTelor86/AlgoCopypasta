@@ -51,7 +51,7 @@ ll query(ll x, Node* cur = root, int l = 0, int r = MAX - 1) {
   if(l == r)
     return cur->f(x);
   int m = l + (r - l) / 2;
-  if(x < m)
+  if(x <= m)
     return max(cur->f(x), query(x, cur->lc, l, m));
   else
     return max(cur->f(x), query(x, cur->rc, m + 1, r));
