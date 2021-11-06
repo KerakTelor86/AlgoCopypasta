@@ -36,6 +36,7 @@ Circle trivial(const vector<Point>& r) {
   }
 }
 
+// SHUFFLE THE POINTS FIRST!!!!!!
 Circle welzl(const vector<Point>& p, int idx = 0, vector<Point> r = {}) {
   if(idx == (int) p.size() || r.size() == 3)
     return trivial(r);
