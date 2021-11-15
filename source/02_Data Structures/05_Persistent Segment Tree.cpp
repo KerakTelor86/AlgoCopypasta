@@ -8,10 +8,11 @@ private:
   vector<int> root;
 
   int newNode() {
+    node.emplace_back();
     return ptr++;
   }
   int copyNode(int idx) {
-    node[ptr] = node[idx];
+    node.push_back(node[idx]);
     return ptr++;
   }
   int build(int l, int r) {
@@ -49,7 +50,7 @@ private:
 public:
   PersistentSegtree(int _n) : n(_n), ptr(0) {
     sz = 30 * n;
-    node.resize(sz);
+    node.reserve(sz);
     root.push_back(build(1, n));
   }
   void update(int x, int val) {
