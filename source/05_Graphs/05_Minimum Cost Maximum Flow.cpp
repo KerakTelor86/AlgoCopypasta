@@ -1,74 +1,65 @@
-// 1-based index
-template<class T>
-using rpq = priority_queue<T, vector<T>, greater<T>>;
+using FlowT = ll;
+using CostT = ll;
 
-const ll INF = 1e18;
+const FlowT F_INF = 1e18;
+const CostT C_INF = 1e18;
+const int MAX_V = 1e5 + 5;
+const int MAX_E = 1e6 + 5;
 
-struct MCMF {
-  struct Edge {
-    int v;
-    ll cap, cost;
-    int rev;
-    Edge(int _v, ll _cap, ll _cost, int _rev) :
-      v(_v), cap(_cap), cost(_cost), rev(_rev) {}
-  };
+namespace MCMF {
+  int n, E;
+  int adj[MAX_E], nxt[MAX_E], lst[MAX_V], frm[MAX_V], vis[MAX_V];
+  FlowT cap[MAX_E], flw[MAX_E], totalFlow;
+  CostT cst[MAX_E], dst[MAX_V], totalCost;
 
-  ll flow, cost;
-  int st, ed, n;
-  vector<ll> dist, H;
-  vector<int> pv, pe;
-  vector<vector<Edge>> adj;
-
-  bool dijkstra() {
-    rpq<pair<ll, int>> pq;
-    dist.assign(n + 1, INF);
-    dist[st] = 0;
-    pq.emplace(0, st);
-    while(!pq.empty()) {
-      auto [cst, pos] = pq.top();
-      pq.pop();
-      if(dist[pos] < cst)
-        continue;
-      for(int i = 0; i < (int) adj[pos].size(); ++i) {
-        auto& e = adj[pos][i];
-        int nxt = e.v;
-        ll nxt_cst = dist[pos] + e.cost + H[pos] - H[nxt];
-        if(e.cap > 0 && nxt_cst < dist[nxt]) {
-          dist[nxt] = nxt_cst;
-          pe[nxt] = i;
-          pv[nxt] = pos;
-          pq.emplace(nxt_cst, nxt);
+  void init(int _n) {
+    n = _n;
+    fill_n(lst, n, -1), E = 0;
+  }
+  void add(int u, int v, FlowT ca, CostT co) {
+    adj[E] = v, cap[E] = ca, flw[E] = 0, cst[E] = +co;
+    nxt[E] = lst[u], lst[u] = E++;
+    adj[E] = u, cap[E] =  0, flw[E] = 0, cst[E] = -co;
+    nxt[E] = lst[v], lst[v] = E++;
+  }
+  int spfa(int s, int t) {
+    fill_n(dst, n, C_INF), dst[s] = 0;
+    queue<int> que;
+    que.push(s);
+    while(que.size()) {
+      int u = que.front();
+      que.pop();
+      for(int e = lst[u]; e != -1; e = nxt[e])
+        if(flw[e] < cap[e]) {
+          int v = adj[e];
+          if(dst[v] > dst[u] + cst[e]) {
+            dst[v] = dst[u] + cst[e];
+            frm[v] = e;
+            if(!vis[v]) {
+              vis[v] = 1;
+              que.push(v);
+            }
+          }
         }
-      }
+      vis[u] = 0;
     }
-    return dist[ed] != INF;
+    return dst[t] < C_INF;
   }
-
-  MCMF(int _n) : n(_n), pv(n + 1), pe(n + 1), adj(n + 1) {}
-
-  void add_edge(int u, int v, ll cap, ll cst) {
-    adj[u].emplace_back(v, cap, cst, adj[v].size());
-    adj[v].emplace_back(u, 0, -cst, adj[u].size() - 1);
-  }
-
-  pair<ll, ll> solve(int _st, int _ed) {
-    st = _st, ed = _ed;
-    flow = 0, cost = 0;
-    H.assign(n + 1, 0);
-    while(dijkstra()) {
-      for(int i = 0; i <= n; ++i)
-        H[i] += dist[i];
-      ll f = INF;
-      for(int i = ed; i != st; i = pv[i])
-        f = min(f, adj[pv[i]][pe[i]].cap);
-      flow += f;
-      cost += f * H[ed];
-      for(int i = ed; i != st; i = pv[i]) {
-        auto& e = adj[pv[i]][pe[i]];
-        e.cap -= f;
-        adj[i][e.rev].cap += f;
+  pair<FlowT, CostT> solve(int s, int t) {
+    totalCost = 0, totalFlow = 0;
+    while(1) {
+      if(!spfa(s, t))
+        break;
+      FlowT mn = F_INF;
+      for(int v = t, e = frm[v]; v != s; v = adj[e ^ 1], e = frm[v])
+        mn = min(mn, cap[e] - flw[e]);
+      for(int v = t, e = frm[v]; v != s; v = adj[e ^ 1], e = frm[v]) {
+        flw[e] += mn;
+        flw[e ^ 1] -= mn;
       }
+      totalFlow += mn;
+      totalCost += mn * dst[t];
     }
-    return {flow, cost};
+    return {totalFlow, totalCost};
   }
 };

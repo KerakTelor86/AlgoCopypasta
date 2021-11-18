@@ -14,7 +14,6 @@ void sa_init() {
   st[0].next.clear();
   ++sz;
 }
-
 void sa_extend(char c) {
   int cur = sz++;
   st[cur].len = st[last].len + 1;
@@ -40,7 +39,6 @@ void sa_extend(char c) {
   }
   last = cur;
 }
-
 // forwarding
 for(int i = 0; i < m; i++) {
   while(cur >= 0 && st[cur].next.count(pa[i]) == 0) {
@@ -54,18 +52,15 @@ for(int i = 0; i < m; i++) {
   } else
     len = cur = 0;
 }
-
 // shortening abc -> bc
 if(l == m) {
   l--;
   if(l <= st[st[cur].link].len)
     cur = st[cur].link;
 }
-
 // finding lowest and highest length
 int lo = st[st[cur].link].len + 1;
 int hi = st[cur].len;
-
 //Finding number of distinct substrings
 //answer = distsub(0)
 LL d[MAXLEN * 2];
@@ -79,7 +74,6 @@ LL distsub(int ver) {
   d[ver] = tp;
   return d[ver];
 }
-
 //Total Length of all distinct substrings
 //call distsub first before call lesub
 LL ans[MAXLEN * 2];
@@ -140,9 +134,6 @@ void minshift(int ver) {
   }
 }
 //end of function
-
-
-
 // LONGEST COMMON SUBSTRING OF TWO STRINGS
 string lcs(string s, string t) {
   sa_init();

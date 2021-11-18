@@ -30,6 +30,7 @@ cc() {
     g++ $cp -O2 -std=gnu++17 -Wall -Wextra -Wshadow -DLOCAL -o $bp
 }
 ma() {
+    ulimit -s unlimited
     echo $li
     if nr; then
         if [[ -f "$bp" ]]; then rm "$bp"; fi
