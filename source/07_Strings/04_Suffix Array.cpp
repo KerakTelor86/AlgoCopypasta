@@ -1,68 +1,67 @@
-// stores result in sa and lcp
-// if lcp is needed, call SuffixArray(str, 1)
-struct SuffixArray {
-  int n;
-  vector<int> sa, lcp, rnk, cnt;
-  vector<pair<int, int>> p;
-  SuffixArray(const string& s, bool calc_lcp = 0) :
-    n(s.length()), sa(n), lcp(calc_lcp ? n : 0), rnk(n),
-    cnt(max(n, 256)), p(n) {
-    for(int i = 0; i < n; ++i)
-      rnk[i] = s[i];
-    iota(sa.begin(), sa.end(), 0);
-    for(int i = 1; i < n; i <<= 1)
-      update_sa(i);
-    if(!calc_lcp)
-      return;
-    vector<int> phi(n), plcp(n);
-    phi[sa[0]] = -1;
-    for(int i = 1; i < n; ++i)
-      phi[sa[i]] = sa[i - 1];
-    int l = 0;
-    for(int i = 0; i < n; ++i) {
-      if(phi[i] == -1)
-        plcp[i] = 0;
-      else {
-        while((i + l < n) && (phi[i] + l < n)
-              && (s[i + l] == s[phi[i] + l]))
-          ++l;
-        plcp[i] = l;
-        l = max(l - 1, 0);
-      }
-    }
-    for(int i = 0; i < n; ++i)
-      lcp[i] = plcp[sa[i]];
-  }
-  void update_sa(int len) {
-    sort_sa(len);
-    sort_sa(0);
-    for(int i = 0; i < n; ++i) p[i] = {rnk[i], rnk[(i + len) % n]};
-    auto lst = p[sa[0]];
-    rnk[sa[0]] = 0;
-    int cur = 0;
-    for(int i = 1; i < n; ++i) {
-      if(lst != p[sa[i]]) {
-        lst = p[sa[i]];
-        ++cur;
-      }
-      rnk[sa[i]] = cur;
-    }
-  }
-  void sort_sa(int offset) {
-    fill(cnt.begin(), cnt.end(), 0);
-    for(int i = 0; i < n; ++i)
-      ++cnt[rnk[(i + offset) % n]];
-    int sum = 0;
-    for(int i = 0; i < (int) cnt.size(); ++i) {
-      int temp = cnt[i];
-      cnt[i] = sum;
-      sum += temp;
-    }
-    vector<int> temp(n);
-    for(int i = 0; i < n; ++i) {
-      int cur = cnt[rnk[(sa[i] + offset) % n]]++;
-      temp[cur] = sa[i];
-    }
-    sa = move(temp);
-  }
-};
+const int VAL = 200005; // max(MXVAL, SZ)
+const int SZ = 200005; // s.length()
+const int LG = 20;
+
+vector<int> pos[SZ], c[LG], p, pn;
+map<int, int> nv;
+int n, s[SZ], a[SZ];
+
+int cnt[VAL];
+
+vector<int> bldSA() {
+  for(int i = 0 ; i < LG ; ++i) c[i] = vector<int>(n<<2, 0);
+	pn = vector<int>(n<<2, 0); p = vector<int>(n<<2, 0);
+
+	for(int i = 0 ; i < n ; ++i) c[0][i] = s[i];
+	for(int x = 1, add = 1 ; add < n ; add <<= 1, x += 1) {
+		memset(cnt, 0, sizeof(cnt));
+		for(int i = 0 ; i < n ; ++i) ++cnt[c[x - 1][i + add]];
+		for(int i = 1 ; i < VAL ; ++i) cnt[i] += cnt[i - 1];
+		for(int i = n - 1 ; i >= 0 ; --i) p[--cnt[c[x - 1][i + add]]] = i;
+
+		memset(cnt, 0, sizeof(cnt));
+		for(int i = 0 ; i < n ; ++i) ++cnt[c[x - 1][i]];
+		for(int i = 1 ; i < VAL ; ++i) cnt[i] += cnt[i - 1];
+		for(int i = n - 1 ; i >= 0 ; --i) pn[--cnt[c[x - 1][p[i]]]] = p[i];
+
+		c[x][pn[0]] = 1;
+		for(int i = 1 ; i < n ; ++i) {
+			c[x][pn[i]] = c[x][pn[i - 1]] + (c[x - 1][pn[i]] != c[x - 1][pn[i - 1]] || 
+						  c[x - 1][pn[i] + add] != c[x - 1][pn[i - 1] + add]);
+		}
+	}
+
+	return pn;
+}
+
+vector<int> kasai(string &txt, vector<int> &sa) {
+	int n = txt.size();
+	vector<int> lcp(n, 0), invSuff(n, 0);
+	for (int i=0; i < n; i++)
+		invSuff[sa[i]] = i;
+	int k = 0;
+	for (int i = 0; i < n; i++) {
+		if (invSuff[i] == n-1){
+			k = 0; continue;
+		}
+		int j = sa[invSuff[i]+1];
+		while (i + k < n && j + k < n && txt[i + k] == txt[j + k])
+			k++;
+		lcp[invSuff[i]] = k;
+		if (k > 0) k--;
+	}
+	return lcp;
+}
+
+bool check(int i, int j) {
+	int len = j - i;
+  for(int x = LG - 1 ; x >= 0 ; --x) {
+		if(len < (1<<x)) continue;
+		if(c[x][i] == c[x][j]) {
+			i += (1<<x); j += (1<<x);
+			len -= (1<<x);
+		}
+	}
+
+	return !len;
+}
