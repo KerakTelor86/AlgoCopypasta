@@ -4,7 +4,7 @@ struct Segtree2D {
       int l, r, val;
       node* lc, *rc;
       node(int _l, int _r, int _val = INF) : l(_l), r(_r), val(_val),
-        lc(NULL), rc(NULL) {}
+      lc(NULL), rc(NULL) {}
     };
     typedef node* pnode;
 
@@ -74,7 +74,7 @@ struct Segtree2D {
     Segtree y;
     node* lc, *rc;
     node(int _l, int _r) : l(_l), r(_r), y(0, MAX),
-      lc(NULL), rc(NULL) {}
+    lc(NULL), rc(NULL) {}
   };
   typedef node* pnode;
 

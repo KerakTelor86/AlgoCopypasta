@@ -5,8 +5,8 @@ struct SuffixArray {
   vector<int> sa, lcp, rnk, cnt;
   vector<pair<int, int>> p;
   SuffixArray(const string& s, bool calc_lcp = 0) :
-    n(s.length()), sa(n), lcp(calc_lcp ? n : 0), rnk(n),
-    cnt(max(n, 256)), p(n) {
+  n(s.length()), sa(n), lcp(calc_lcp ? n : 0), rnk(n),
+  cnt(max(n, 256)), p(n) {
     for(int i = 0; i < n; ++i)
       rnk[i] = s[i];
     iota(sa.begin(), sa.end(), 0);

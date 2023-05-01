@@ -5,8 +5,8 @@ struct HLD {
   SegTree seg;
 
   HLD(const vector<vector<int>>& edges) :
-    n(edges.size()), id(n, -1), size(n, -1), idx(n, -1),
-    up(n, -1), adj(edges), seg(n) {
+  n(edges.size()), id(n, -1), size(n, -1), idx(n, -1),
+  up(n, -1), adj(edges), seg(n) {
     precompute(0, -1);
     decompose(0, -1);
     int cnt = 0;
